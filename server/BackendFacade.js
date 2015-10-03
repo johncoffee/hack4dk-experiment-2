@@ -75,14 +75,44 @@ var BackendFacade = (function () {
         var collection = this;
         switch (this.type) {
             case "white":
-                setTimeout(function () {
-                    collection.collection = [
-                        new FunItem(collection.type, {text: "I'm batman"}),
-                        new FunItem(collection.type, {text: "Yesterday i found this beauty in the trash"}),
-                        new FunItem(collection.type, {text: "dat ass"}),
-                    ];
-                    callback(collection);
-                }, 0);
+                AuthService.onInstaLoginCallback = function (instagramObj) {
+                    var req = instagramObj.get("https://api.instagram.com/v1/users/self/feed");
+                    req.done(function () {
+                        var json = req.responseJSON;
+                        // pagination
+                        //document.querySelector("#load-more").onclick = function() {
+                        //    var pagination = json.pagination;
+                        //    if (pagination) {
+                        //        console.info("next page: " + pagination.next_url);
+                        //        fetchTags(instagramObj, pagination.next_url);
+                        //    }
+                        //};
+                        // data
+                        console.debug(json);
+                        var posts = [];
+                        json.data.forEach(function (item) {
+                            var comments = item.comments.data.map(function (comment) {
+                                return {
+                                    name: comment.from.full_name,
+                                    text: comment.text,
+                                };
+                            });
+                            if (comments.length) {
+                                posts.push({
+                                    comments: comments,
+                                });    
+                            }
+                        });
+                        //var funItems = posts.map(function (post) {
+                        //    return new FunItem(collection.type, post);
+                        //});
+                        var funItems = [posts];
+                        console.debug(funItems);
+                        collection.collection = funItems;
+                        callback(collection);
+                    });
+                };
+                AuthService.openInstagramPopup();
                 break;
             case "oldPeople":
                 var oldPeople = new OldPeople();

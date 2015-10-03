@@ -53,6 +53,20 @@
 <template id="current-tpl">
     <pre>{{text}}</pre>
 </template>
+
+<template id="postTpl">
+    <div style="margin: 20px 0;">
+        <div style="margin: 10px">
+            {{comments}}
+        </div>
+    </div>
+    <hr>
+</template>
+
+<template id="templateTpl">
+    <div><strong>{{name}}:</strong> {{text}}</div>
+</template>
+
 <template id="image-item-tpl">
     <div style="margin: 20px 0; text-align: center">
         <div onclick="gui.nextBlack()"
@@ -65,6 +79,8 @@
 </template>
 
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/oauth-js/dist/oauth.min.js"></script>
+<script src="server/OAuthService.js"></script>
 <script src="server/OldPeople.js"></script>
 <script src="server/BackendFacade.js"></script>
 
@@ -86,10 +102,32 @@ $(function () {
     gui.nextWhite = function () {
         BackendFacade.getNext('white', function (item) {
             var html = currentTpl; // IRL you'd choose template based on item.type
-            html = html.replace(/\{\{text}}/gi, JSON.stringify(item.body.text, null, 2));
+            console.log(item);
+            html = renderPosts(item);
             $("#bottom-container .current").html(html);
         });
     };
+
+    function renderPosts(posts) {
+        var postTpl = document.querySelector("#postTpl").innerHTML;
+        var commentTpl = document.querySelector("#templateTpl").innerHTML;
+        var postsHTML = "";
+
+        posts.forEach(function (post) {
+            var commentsHTML = '';
+            post.comments.forEach(function(comment) {
+                commentsHTML += commentTpl
+                        .replace("{{name}}", comment.name)
+                        .replace("{{text}}", comment.text)
+            });
+
+            postsHTML += postTpl
+                    .replace("{{src}}", post.url)
+                    .replace("{{comments}}", commentsHTML);
+        });
+
+        return postsHTML;
+    }
 });
 </script>
 </body>
