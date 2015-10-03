@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>eeeexample</title>
+</head>
+<style>
+    body{
+        font-family: sans-serif;
+        margin: 0;
+    }
+    button {
+        font-size: 1.5em;
+        color: inherit;
+        background: inherit;
+        border: 1px solid inherit;
+        border-radius: 4px;
+    }
+    .container {
+        display: block;
+        position: fixed;
+        height: 50%;
+        width: 100%;
+        overflow: auto;
+    }
+    #top-container {
+        top: 0;
+    }
+    #bottom-container {
+        top: 50%;
+    }
+    .black {
+        background: #0E0F10;
+        color: #FFF3E7;
+    }
+    .white {    
+        color: #0E0F10;
+        background: #FFF3E7;;
+    }
+</style>
+<body>
+
+<div id="top-container" class="container black">
+    <div class="current"></div>
+    <button onclick="gui.nextBlack()">next black</button>
+</div>
+
+<div id="bottom-container" class="container white">
+    <div class="current"></div>
+    <button onclick="gui.nextWhite()">next white</button>
+</div>
+
+<template id="current-tpl">
+    <pre>{{text}}</pre>
+</template>
+
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="server/app.js"></script>
+
+<script>
+var gui = Object.create(null);
+
+$(function () {
+    var currentTpl = document.querySelector("#current-tpl").innerHTML;
+
+    gui.nextBlack = function nextWhite() {
+        BackendFacade.getNext('black', function (item) {
+            var html = currentTpl; // IRL you'd choose template based on item.type
+            html = html.replace(/\{\{text}}/gi, JSON.stringify(item.body.text, null, 2));
+            $("#top-container .current").html(html);
+        });
+    };
+    
+    gui.nextWhite = function nextWhite() {
+        BackendFacade.getNext('white', function (item) {
+            var html = currentTpl; // IRL you'd choose template based on item.type
+            html = html.replace(/\{\{text}}/gi, JSON.stringify(item.body.text, null, 2));
+            $("#bottom-container .current").html(html);
+        });
+    };
+});
+</script>
+</body>
+</html>
