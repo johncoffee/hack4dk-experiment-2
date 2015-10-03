@@ -106,7 +106,7 @@ var BackendFacade = (function () {
                         //var funItems = posts.map(function (post) {
                         //    return new FunItem(collection.type, post);
                         //});
-                        var funItems = [posts];
+                        var funItems = [posts]; // TODO
                         console.debug(funItems);
                         collection.collection = funItems;
                         callback(collection);
