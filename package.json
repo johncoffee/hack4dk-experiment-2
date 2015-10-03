@@ -1,0 +1,25 @@
+{
+  "name": "hack4dk-experiment-1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johncoffee/hack4dk-experiment-2.git"
+  },
+  "author": "",
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/johncoffee/hack4dk-experiment-2/issues"
+  },
+  "homepage": "https://github.com/johncoffee/hack4dk-experiment-2#readme",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-inject": "^3.0.0",
+    "walk": "^2.3.9"
+  },
+  "private": true
+}
