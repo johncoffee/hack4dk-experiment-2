@@ -94,6 +94,9 @@ var BackendFacade = (function () {
                     callback(collection);
                 }, 500);
                 break;
+            case "instagramComments":
+                
+                break;
         }
     };
 
