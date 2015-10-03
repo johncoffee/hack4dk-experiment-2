@@ -82,20 +82,16 @@ var BackendFacade = (function () {
                         new FunItem(collection.type, {text: "dat ass"}),
                     ];
                     callback(collection);
-                }, 500);
+                }, 0);
                 break;
-            case "black":
-                setTimeout(function () {
-                    collection.collection = [
-                        new FunItem(collection.type, {text: "What did the pope say to the orphan?"}),
-                        new FunItem(collection.type, {text: "Why are my eyes red?"}),
-                        new FunItem(collection.type, {text: "Where did I forget my phone?"}),
-                    ];
-                    callback(collection);
-                }, 500);
-                break;
-            case "instagramComments":
-                
+            case "oldPeople":
+                var oldPeople = new OldPeople();
+                oldPeople.getData(function (data) {
+                    collection.collection = data.map(function (item) {
+                        return new FunItem(collection.type, item);
+                    });
+                    callback(collection);    
+                });
                 break;
         }
     };

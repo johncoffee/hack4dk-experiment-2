@@ -53,25 +53,36 @@
 <template id="current-tpl">
     <pre>{{text}}</pre>
 </template>
+<template id="image-item-tpl">
+    <div style="margin: 20px 0">
+        <div style="background: #fff url('{{url}}') center center;
+        height: 400px;
+        width: 400px;
+        background-size: cover;
+        display: inline-block;"></div>
+    </div>
+</template>
 
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
-<script src="server/app.js"></script>
+<script src="server/OldPeople.js"></script>
+<script src="server/BackendFacade.js"></script>
 
 <script>
 var gui = Object.create(null);
 
 $(function () {
     var currentTpl = document.querySelector("#current-tpl").innerHTML;
+    var imageItemTpl = document.querySelector("#image-item-tpl").innerHTML;
 
-    gui.nextBlack = function nextWhite() {
-        BackendFacade.getNext('black', function (item) {
-            var html = currentTpl; // IRL you'd choose template based on item.type
-            html = html.replace(/\{\{text}}/gi, JSON.stringify(item.body.text, null, 2));
+    gui.nextBlack = function () {
+        BackendFacade.getNext('oldPeople', function (item) {
+            var html = imageItemTpl; // IRL you'd choose template based on item.type
+            html = html.replace(/\{\{url}}/gi, item.body.url);
             $("#top-container .current").html(html);
         });
     };
     
-    gui.nextWhite = function nextWhite() {
+    gui.nextWhite = function () {
         BackendFacade.getNext('white', function (item) {
             var html = currentTpl; // IRL you'd choose template based on item.type
             html = html.replace(/\{\{text}}/gi, JSON.stringify(item.body.text, null, 2));
