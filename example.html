@@ -37,6 +37,16 @@
         color: #020207;
         background: #fffafa;
     }
+    .deselected {
+        /*opacity: 0.15;*/
+        margin: 20px 0;
+    }
+    .selected {
+        background: #cfffb8;
+        /*opacity: 1.0;*/
+        margin: 0;
+        padding: 20px 0;
+    }
 </style>
 <body>
 
@@ -55,12 +65,9 @@
 </template>
 
 <template id="postTpl">
-    <div style="margin: 20px 0;">
-        <div style="margin: 10px">
-            {{comments}}
-        </div>
+    <div class="post_con deselected">
+        {{comments}}
     </div>
-    <hr>
 </template>
 
 <template id="templateTpl">
