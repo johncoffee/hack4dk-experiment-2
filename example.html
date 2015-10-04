@@ -97,7 +97,9 @@ var gui = Object.create(null);
 $(function () {
     var currentTpl = document.querySelector("#current-tpl").innerHTML;
     var imageItemTpl = document.querySelector("#image-item-tpl").innerHTML;
-
+    
+    var comments = [];
+    
     gui.nextBlack = function () {
         BackendFacade.getNext('oldPeople', function (item) {
             var html = imageItemTpl; // IRL you'd choose template based on item.type
@@ -109,31 +111,28 @@ $(function () {
     gui.nextWhite = function () {
         BackendFacade.getNext('white', function (item) {
             var html = currentTpl; // IRL you'd choose template based on item.type
-            console.log(item);
-            html = renderPosts(item);
+            console.log("to Render ",item);
+            html = renderPost(item.body);
             $("#bottom-container .current").html(html);
         });
     };
 
-    function renderPosts(posts) {
+    function renderPost(post) {
         var postTpl = document.querySelector("#postTpl").innerHTML;
         var commentTpl = document.querySelector("#templateTpl").innerHTML;
-        var postsHTML = "";
-
-        posts.forEach(function (post) {
-            var commentsHTML = '';
-            post.comments.forEach(function(comment) {
-                commentsHTML += commentTpl
-                        .replace("{{name}}", comment.name)
-                        .replace("{{text}}", comment.text)
-            });
-
-            postsHTML += postTpl
-                    .replace("{{src}}", post.url)
-                    .replace("{{comments}}", commentsHTML);
+        var resultHTML = "";
+        
+        var commentsHTML = '';
+        post.comments.forEach(function(comment) {
+            commentsHTML += commentTpl
+                    .replace("{{name}}", comment.name)
+                    .replace("{{text}}", comment.text)
         });
+        resultHTML += postTpl
+                .replace("{{src}}", post.url)
+                .replace("{{comments}}", commentsHTML);
 
-        return postsHTML;
+        return resultHTML;
     }
 });
 </script>
