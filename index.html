@@ -87,9 +87,13 @@
 <div id="top-container" class="container black">
     <div class="current"></div>
     <div class="next_button">
-        <button onclick="gui.nextBlack()">Next Topic</button>
-        <!--<button>{{index}}/{{total}}</button>-->
         <button onclick="gui.prevBlack()">Prev Topic</button>
+        <span style="display: inline-block; margin-right: 25px;">
+            <span id="top_current"></span>
+            /
+            <span id="top_total"></span>    
+        </span>
+        <button onclick="gui.nextBlack()">Next Topic</button>
     </div>
 </div>
 
@@ -98,7 +102,7 @@
     <div class="next_button">
         <button onclick="gui.fullscreen()" class="fsbutton">Full Screen :)</button>
         <button onclick="gui.prevWhite()">Prev Comment</button>
-        <!--<button>{{index}}/{{total}}</button>-->
+        <!--<button>{{current}}/{{total}}</button>-->
         <button onclick="gui.nextWhite()">Next Comment</button>
     </div>
 </div>
@@ -156,6 +160,8 @@ $(function () {
             BackendFacade.getNext('oldPeople', function (item) {
                 var html = imageItemTpl; // IRL you'd choose template based on item.type
                 html = html.replace(/\{\{url}}/gi, item.body.url);
+                $('#top_current').text(BackendFacade.pageInfo('oldPeople').current);
+                $('#top_total').text(BackendFacade.pageInfo('oldPeople').total);
                 $("#top-container .current").html(html);
             });    
     };

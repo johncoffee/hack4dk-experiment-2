@@ -4,15 +4,13 @@ var BackendFacade = (function () {
     var activeCollections = Object.create(null);
     
     facade.pageInfo = function (collectionID) {
-        var res = {index: "", total: ""};
+        var res = {current: "", total: ""};
         var collection = activeCollections[collectionID];
         if (collection) {
             res.total = collection.collection.length;
-            res.index = collection.index;
+            res.current = collection.index;
         }
-        else {
-            return res;
-        }
+        return res;
     };
     
     facade.getNext = function (collectionID, callback) {
