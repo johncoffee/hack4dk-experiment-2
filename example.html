@@ -12,22 +12,42 @@
     button {
         font-size: 1.5em;
         color: inherit;
-        background: inherit;
         border: 1px solid inherit;
         border-radius: 4px;
+    }
+    .black button {
+        background: #020207;
+    }
+    .white button {
+        background: #fffafa;
     }
     .container {
         display: block;
         position: fixed;
-        height: 50%;
         width: 100%;
         overflow: auto;
     }
     #top-container {
         top: 0;
+        height: 65%
     }
     #bottom-container {
-        top: 50%;
+        top: 65%;
+        height: 35%;
+    }
+    .next_button {
+        position: absolute;
+    }
+    #top-container .next_button {
+        bottom: 0;
+        right: 0;
+    }
+    #bottom-container .next_button {
+        right: 0;
+        bottom: 0;
+    }
+    .next_button button {
+        margin: 0 25px 25px 0;
     }
     .black {
         background: #020207;
@@ -52,12 +72,16 @@
 
 <div id="top-container" class="container black">
     <div class="current"></div>
-    <button onclick="gui.nextBlack()">next black</button>
+    <div class="next_button">
+        <button onclick="gui.nextBlack()">Next Topic</button>
+    </div>
 </div>
 
 <div id="bottom-container" class="container white">
     <div class="current"></div>
-    <button onclick="gui.nextWhite()">next white</button>
+    <div class="next_button">
+        <button onclick="gui.nextWhite()">Next Comment</button>
+    </div>
 </div>
 
 <template id="current-tpl">
@@ -75,14 +99,13 @@
 </template>
 
 <template id="image-item-tpl">
-    <div style="margin: 20px 0; text-align: center">
-        <div onclick="gui.nextBlack()"
-             style="background: #fff url('{{url}}') center center;
-            height: 400px;
-            width: 400px;
-            background-size: cover;
-            display: inline-block;"></div>
-    </div>
+    <div onclick="gui.nextBlack()"
+         style="background: transparent url('{{url}}') center center no-repeat;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        background-size: contain;
+        display: inline-block;"></div>
 </template>
 
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
@@ -101,11 +124,14 @@ $(function () {
     var comments = [];
     
     gui.nextBlack = function () {
-        BackendFacade.getNext('oldPeople', function (item) {
-            var html = imageItemTpl; // IRL you'd choose template based on item.type
-            html = html.replace(/\{\{url}}/gi, item.body.url);
-            $("#top-container .current").html(html);
-        });
+        var confirmed = true || confirm("Don't change the Topic unless the turn is over!");
+        if (confirmed) {
+            BackendFacade.getNext('oldPeople', function (item) {
+                var html = imageItemTpl; // IRL you'd choose template based on item.type
+                html = html.replace(/\{\{url}}/gi, item.body.url);
+                $("#top-container .current").html(html);
+            });    
+        }
     };
     
     gui.nextWhite = function () {

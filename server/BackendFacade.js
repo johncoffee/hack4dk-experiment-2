@@ -80,8 +80,8 @@ var BackendFacade = (function () {
                     req.done(function () {
                         var json = req.responseJSON;
                         // pagination
-                        //document.querySelector("#load-more").onclick = function() {
-                        //    var pagination = json.pagination;
+                        //var pagination = json.pagination;
+                        //document.querySelector("#instagram-load-more").onclick = function() {
                         //    if (pagination) {
                         //        console.info("next page: " + pagination.next_url);
                         //        fetchTags(instagramObj, pagination.next_url);
