@@ -15,6 +15,18 @@ var BackendFacade = (function () {
         }
     };
     
+    facade.getPrev = function (collectionID, callback) {
+        var collection = activeCollections[collectionID];
+        if (!collection) {
+            getCollection(collectionID, function (collection) {
+                callback(collection.getPrev());
+            });
+        }
+        else {
+            callback(collection.getPrev());
+        }
+    };
+    
     /**
      *  get collection instance by map key
      * @param  {string} key
@@ -136,7 +148,16 @@ var BackendFacade = (function () {
      */
     FunCollection.prototype.getNext = function() {
         var item = this.collection[this.index++];
-        this.index = (this.index >= this.collection.length) ? 0 : this.index;
+        if (this.index >= this.collection.length) {
+            this.index = 0; 
+        }
+        return item;
+    };
+    FunCollection.prototype.getPrev = function() {
+        var item = this.collection[this.index--];
+        if (this.index < 0) {
+            this.index = this.collection.length-1;
+        }
         return item;
     };
 

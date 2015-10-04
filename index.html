@@ -68,6 +68,15 @@
         margin: 0;
         padding: 20px 0;
     }
+    body button.fsbutton {
+        background: #ffa; !important; 
+        color: #008 !important;
+    }
+    body:-webkit-full-screen button.fsbutton	{ opacity: 0.0 !important; }
+    body:-moz-full-screen	 button.fsbutton	{ opacity: 0.0 !important; }
+    body:-ms-full-screen	 button.fsbutton	{ opacity: 0.0 !important; }
+    body:-o-full-screen		 button.fsbutton  { opacity: 0.0 !important; }
+    body:full-screen		 button.fsbutton	{ opacity: 0.0 !important; }
 </style>
 <body id="fullscreen">
 
@@ -81,7 +90,8 @@
 <div id="bottom-container" class="container white">
     <div class="current"></div>
     <div class="next_button">
-        <button onclick="gui.fullscreen()">Full Screen</button>
+        <button onclick="gui.fullscreen()" class="fsbutton">Full Screen :)</button>
+        <button onclick="gui.prevWhite()">Prev Comment</button>
         <button onclick="gui.nextWhite()">Next Comment</button>
     </div>
 </div>
@@ -145,11 +155,20 @@ $(function () {
             });    
         }
     };
+
+    gui.prevWhite = function () {
+        BackendFacade.getPrev('white', function (item) {
+            var html = currentTpl; // IRL you'd choose template based on item.type
+            console.log("to Render ",item);
+            html = renderPost(item.body);
+            $("#bottom-container .current").html(html);
+        });
+    };
+
     
     gui.nextWhite = function () {
         BackendFacade.getNext('white', function (item) {
             var html = currentTpl; // IRL you'd choose template based on item.type
-            console.log("to Render ",item);
             html = renderPost(item.body);
             $("#bottom-container .current").html(html);
         });
