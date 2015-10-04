@@ -68,7 +68,7 @@
         padding: 20px 0;
     }
 </style>
-<body>
+<body id="fullscreen">
 
 <div id="top-container" class="container black">
     <div class="current"></div>
@@ -80,6 +80,7 @@
 <div id="bottom-container" class="container white">
     <div class="current"></div>
     <div class="next_button">
+        <button onclick="gui.fullscreen()">Full Screen</button>
         <button onclick="gui.nextWhite()">Next Comment</button>
     </div>
 </div>
@@ -118,6 +119,16 @@
 var gui = Object.create(null);
 
 $(function () {
+    gui.fullscreen = function() {
+        var e = document.getElementById("fullscreen");
+        if (RunPrefixMethod(document, "FullScreen") || RunPrefixMethod(document, "IsFullScreen")) {
+            RunPrefixMethod(document, "CancelFullScreen");
+        }
+        else {
+            RunPrefixMethod(e, "RequestFullScreen");
+        }
+    };
+    
     var currentTpl = document.querySelector("#current-tpl").innerHTML;
     var imageItemTpl = document.querySelector("#image-item-tpl").innerHTML;
     
@@ -159,6 +170,26 @@ $(function () {
                 .replace("{{comments}}", commentsHTML);
 
         return resultHTML;
+    }
+
+    var pfx = ["webkit", "moz", "ms", "o", ""];
+    function RunPrefixMethod(obj, method) {
+
+        var p = 0, m, t;
+        while (p < pfx.length && !obj[m]) {
+            m = method;
+            if (pfx[p] == "") {
+                m = m.substr(0,1).toLowerCase() + m.substr(1);
+            }
+            m = pfx[p] + m;
+            t = typeof obj[m];
+            if (t != "undefined") {
+                pfx = [pfx[p]];
+                return (t == "function" ? obj[m]() : obj[m]);
+            }
+            p++;
+        }
+
     }
 });
 </script>
