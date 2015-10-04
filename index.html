@@ -3,23 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>eeeexample</title>
+    <meta name="viewport" content="width=device-width">
 </head>
 <style>
     body{
         font-family: sans-serif;
         margin: 0;
+        font-size: 16px;
     }
     button {
-        font-size: 1.5em;
+        padding: 5px 10px;
+        font-size: 1.15em;
         color: inherit;
         border: 1px solid inherit;
         border-radius: 4px;
+        background: inherit;
     }
     .black button {
-        background: #020207;
+        background: rgba(0,0,0, 0.5);
     }
     .white button {
-        background: #fffafa;
+        background: rgba(255,255,255, 0.5);
     }
     .container {
         display: block;
@@ -60,7 +64,7 @@
     }
     .deselected {
         /*opacity: 0.15;*/
-        margin: 20px 0;
+        margin: 25px;
     }
     .selected {
         background: #cfffb8;
@@ -84,6 +88,8 @@
     <div class="current"></div>
     <div class="next_button">
         <button onclick="gui.nextBlack()">Next Topic</button>
+        <!--<button>{{index}}/{{total}}</button>-->
+        <button onclick="gui.prevBlack()">Prev Topic</button>
     </div>
 </div>
 
@@ -92,6 +98,7 @@
     <div class="next_button">
         <button onclick="gui.fullscreen()" class="fsbutton">Full Screen :)</button>
         <button onclick="gui.prevWhite()">Prev Comment</button>
+        <!--<button>{{index}}/{{total}}</button>-->
         <button onclick="gui.nextWhite()">Next Comment</button>
     </div>
 </div>
@@ -107,7 +114,7 @@
 </template>
 
 <template id="templateTpl">
-    <div><strong>{{name}}:</strong> {{text}}</div>
+    <p><strong>{{name}}:</strong> {{text}}</p>
 </template>
 
 <template id="image-item-tpl">
@@ -146,14 +153,19 @@ $(function () {
     var comments = [];
     
     gui.nextBlack = function () {
-        var confirmed = true || confirm("Don't change the Topic unless the turn is over!");
-        if (confirmed) {
             BackendFacade.getNext('oldPeople', function (item) {
                 var html = imageItemTpl; // IRL you'd choose template based on item.type
                 html = html.replace(/\{\{url}}/gi, item.body.url);
                 $("#top-container .current").html(html);
             });    
-        }
+    };
+    
+    gui.prevBlack = function () {
+        BackendFacade.getPrev('oldPeople', function (item) {
+            var html = imageItemTpl; // IRL you'd choose template based on item.type
+            html = html.replace(/\{\{url}}/gi, item.body.url);
+            $("#top-container .current").html(html);
+        });    
     };
 
     gui.prevWhite = function () {
