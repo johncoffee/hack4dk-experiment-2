@@ -75,17 +75,20 @@ var BackendFacade = (function () {
         var collection = this;
         switch (this.type) {
             case "white":
-                AuthService.onInstaLoginCallback = function (instagramObj) {
-                    var req = instagramObj.get("https://api.instagram.com/v1/users/self/feed");
+                AuthService.onInstaLoginCallback = function (instagramObj, url, pagesToLoad) {
+                    var req = instagramObj.get(url || "https://api.instagram.com/v1/users/self/feed");
                     req.done(function () {
                         var json = req.responseJSON;
-                        // pagination
-                        //var pagination = json.pagination;
+                        var pagination = json.pagination;
                         //document.querySelector("#instagram-load-more").onclick = function() {
-                        //    if (pagination) {
-                        //        console.info("next page: " + pagination.next_url);
-                        //        fetchTags(instagramObj, pagination.next_url);
-                        //    }
+                        console.log(pagination, pagesToLoad)
+                        if (!pagesToLoad) {
+                            pagesToLoad = 1;
+                        }
+                        if (pagination && pagesToLoad++ < 4) { // 3 pages of comments!
+                            console.info("next page: " + pagination.next_url);
+                            AuthService.onInstaLoginCallback(instagramObj, pagination.next_url, pagesToLoad);
+                        }
                         //};
                         // data
                         console.debug(json);
@@ -109,6 +112,7 @@ var BackendFacade = (function () {
                         });
                         console.log(funItems);
                         collection.collection = funItems;
+                        
                         callback(collection);
                     });
                 };
